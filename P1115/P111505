@@ -1,0 +1,94 @@
+Program P111525;
+Uses Crt;
+Const
+       nmax=100;
+       inp='P11\P1115\P111525.inp';
+Var
+       f:text;
+       n:byte;
+       a:array[1..nmax,1..nmax]of integer;
+       d,pre:array[1..nmax]of integer;
+       cx:array[1..nmax]of boolean;
+
+Procedure Nhap;
+Var i,j: byte;
+Begin
+ Assign(f,inp); Reset(f);
+ Readln(f,n);
+ For i:=1 to n do
+ begin
+   For j:=1 to n do
+   begin
+     Read(f,a[i,j]);
+     If a[i,j]=0 then a[i,j]:=10000;
+   end;
+   Readln(f);
+ end;
+ Close(f);
+End;
+
+Procedure Chuan_bi;
+Var i: byte;
+Begin
+ FillChar(cx,Sizeof(cx),0);
+ For i:=1 to n do
+ begin
+   d[i]:=a[1,i];
+   pre[i]:=1;
+ end;
+ cx[1]:=false;
+End;
+
+Procedure Tim_min(Var vt:byte);
+Var i : byte;
+    min:integer;
+Begin
+ min:=maxint;
+ For i:=1 to n do
+ If (min>d[i])and(cx[i]) then
+ begin
+   min:=d[i];
+   vt:=i;
+ end;
+End;
+
+Procedure Xu_ly;
+Var i,j,vt: byte;
+Begin
+ For i:=1 to n-1 do
+ begin
+   Tim_min(vt);
+   cx[vt]:=false;
+   For j:=1 to n do
+   If (cx[j])and(d[j]>d[vt]+a[vt,j]) then
+   begin
+     d[j]:=d[vt]+a[vt,j];
+     pre[j]:=vt;
+   end;
+ end;
+End;
+
+Procedure Path(k:byte);
+Begin
+ If pre[k]<>1 then Path(pre[k]);
+ Write(k,' ');Readln;
+End;
+
+Procedure Inkq;
+Begin
+ If d[n]=10000 then  Writeln('Khong co duong di')
+ Else
+ begin
+   Writeln('Trinh tu duong di:');
+   Write(1,' '); Path(n);
+ end;
+End;
+
+BEGIN
+ ClrScr;
+ Nhap;
+ Chuan_bi;
+ Xu_ly;
+ Inkq;
+ Readln;
+END.
