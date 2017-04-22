@@ -1,0 +1,5 @@
+uses crt , graph;
+const radius = 20;
+var  gd , gm : integer;
+y := yc ; x := xc;
+while not keypressed do
